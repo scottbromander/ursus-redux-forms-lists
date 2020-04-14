@@ -1,17 +1,38 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./components/App/App";
+
+import { createStore, combineReducers } from "redux";
+import { Provider } from "react-redux";
+
+const animalsReducerInitialState = {
+  animalsList: [],
+  currentAnimal: "",
+};
+
+const animalsReducer = (state = animalsReducerInitialState, action) => {
+  if (action.type === "ADD_ANIMAL") {
+    return {
+      ...state,
+      animalsList: [...state.animalsList, action.payload],
+    };
+  }
+
+  if (action.type === "SET_CURRENT_ANIMAL") {
+    return {
+      ...state,
+      currentAnimal: action.payload,
+    };
+  }
+
+  return state;
+};
+
+const storeInstance = createStore(combineReducers({ animalsReducer }));
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={storeInstance}>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </Provider>,
+  document.getElementById("root")
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
